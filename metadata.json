@@ -1,0 +1,8 @@
+{
+  "name": "Remix: NailOS SaaS",
+  "description": "NailOS - Hệ điều hành quản lý Salon chuyên nghiệp dành cho chủ tiệm Nail gồm đặt lịch, CRM chăm sóc khách hàng, quản lý doanh thu, thợ và báo cáo thông minh.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

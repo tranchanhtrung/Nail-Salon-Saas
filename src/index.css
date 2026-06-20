@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-brand-50: #fff8f5;
+  --color-brand-100: #ffd8e6;
+  --color-brand-200: #e8a0bf;
+  --color-brand-300: #fbb1d1;
+  --color-brand-400: #ffd8e6;
+  --color-brand-500: #874c67;
+  --color-brand-600: #6c354f;
+  --color-brand-700: #514348;
+  --color-brand-800: #33302e;
+  --color-brand-900: #1e1b19;
+  
+  --color-gold-50: #fcf9f5;
+  --color-gold-100: #ffdea5;
+  --color-gold-200: #e9c176;
+  --color-gold-500: #775a19;
+  --color-gold-600: #5d4201;
+}
+
+/* Custom visual highlights */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(244, 63, 122, 0.1);
+}
+
+.dark-glass {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
