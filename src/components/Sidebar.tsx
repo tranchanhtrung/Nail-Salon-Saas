@@ -30,6 +30,7 @@ interface SidebarProps {
   trialDaysRemaining: number;
   isTrialExpired: boolean;
   appRole: "superadmin" | "admin" | "customer";
+  activeTenantLogo?: string;
 }
 
 export default function Sidebar({ 
@@ -43,7 +44,8 @@ export default function Sidebar({
   activeTenantId,
   trialDaysRemaining,
   isTrialExpired,
-  appRole
+  appRole,
+  activeTenantLogo
 }: SidebarProps) {
 
   // Dynamic menu items setup
@@ -115,17 +117,19 @@ export default function Sidebar({
       >
         {/* Brand Header with dynamic badge */}
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#874C67] text-white shadow-md shadow-brand-100">
+          <div className="flex items-center gap-3 overflow-hidden">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[#874C67] text-white shadow-md shadow-brand-100 overflow-hidden">
               {appRole === "superadmin" ? (
                 <Crown className="h-5.5 w-5.5 text-amber-300" />
+              ) : activeTenantLogo ? (
+                <img src={activeTenantLogo} className="h-full w-full object-cover" referrerPolicy="no-referrer" />
               ) : (
                 <Scissors className="h-5.5 w-5.5 rotate-45" />
               )}
             </div>
-            <div>
-              <h1 className="font-display text-lg font-extrabold tracking-tight text-[#874C67]">
-                NailOS SaaS
+            <div className="min-w-0">
+              <h1 className="font-display text-base font-black tracking-tight text-[#874C67] truncate max-w-[150px]">
+                {appRole === "superadmin" ? "NailOS SaaS" : activeTenantName}
               </h1>
               <span className={`inline-flex items-center rounded-sm px-1.5 py-0.5 text-[8.5px] font-extrabold uppercase tracking-wider ${
                 appRole === "superadmin" 

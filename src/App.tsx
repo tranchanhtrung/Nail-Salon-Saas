@@ -1038,6 +1038,7 @@ export default function App() {
         trialDaysRemaining={daysRemaining}
         isTrialExpired={isTrialExpired}
         appRole={appRole}
+        activeTenantLogo={currentTenant.identityImages?.[0]}
       />
 
       {/* Main Content Layout area */}
