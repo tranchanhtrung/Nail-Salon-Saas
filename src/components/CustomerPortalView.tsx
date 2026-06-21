@@ -24,9 +24,11 @@ import {
   ShieldAlert,
   Info
 } from "lucide-react";
-import { Service, Staff, Customer, Coupon, Booking } from "../types";
+import { Service, Staff, Customer, Coupon, Booking, Tenant } from "../types";
+import IntroView from "./IntroView";
 
 interface CustomerPortalViewProps {
+  currentTenant: Tenant;
   services: Service[];
   staff: Staff[];
   customers: Customer[];
@@ -37,6 +39,7 @@ interface CustomerPortalViewProps {
 }
 
 export default function CustomerPortalView({
+  currentTenant,
   services,
   staff,
   customers,
@@ -45,7 +48,7 @@ export default function CustomerPortalView({
   onAddCustomer,
   onDeleteCustomer
 }: CustomerPortalViewProps) {
-  const [activeSubTab, setActiveSubTab] = useState<"menu" | "loyalty" | "coupons" | "review" | "register" | "compliance">("menu");
+  const [activeSubTab, setActiveSubTab] = useState<"intro" | "menu" | "loyalty" | "coupons" | "review" | "register" | "compliance">("intro");
 
   // 4. Registration states
   const [regPhone, setRegPhone] = useState("");
@@ -297,6 +300,7 @@ export default function CustomerPortalView({
       {/* Sub Tabs Selection menu */}
       <div className="flex border-b border-pink-100 gap-1 overflow-x-auto pb-px">
         {[
+          { id: "intro", label: "✨ Giới thiệu", icon: Compass },
           { id: "menu", label: "💅 Bảng giá & Combo", icon: Sparkles },
           { id: "loyalty", label: "💎 Điểm thưởng Loyalty", icon: Award },
           { id: "coupons", label: "🎁 Ưu đãi & Voucher", icon: Tag },
@@ -319,6 +323,17 @@ export default function CustomerPortalView({
       </div>
 
       {/* RENDER VIEW ACCORDING TO PORTAL SUB-TAB */}
+      {activeSubTab === "intro" && (
+        <IntroView 
+          currentTenant={currentTenant}
+          services={services}
+          staff={staff}
+          onBookNow={() => {
+            setBookModalOpen(true);
+          }}
+        />
+      )}
+
       {activeSubTab === "menu" && (
         <div className="space-y-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">

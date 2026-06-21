@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { 
   Settings, 
   Building, 
@@ -92,7 +92,33 @@ export default function SalonSettingsView({
   const [salonPhone, setSalonPhone] = useState(currentTenant.phone);
   const [salonEmail, setSalonEmail] = useState(currentTenant.ownerEmail);
   const [salonOwner, setSalonOwner] = useState(currentTenant.ownerName);
+  const [salonDescription, setSalonDescription] = useState(currentTenant.description || "");
+  const [salonAwardsText, setSalonAwardsText] = useState((currentTenant.awards || []).join("\n"));
+  
+  const initialTestis = currentTenant.testimonials || [];
+  const [testiName1, setTestiName1] = useState(initialTestis[0]?.guestName || "");
+  const [testiText1, setTestiText1] = useState(initialTestis[0]?.text || "");
+  const [testiName2, setTestiName2] = useState(initialTestis[1]?.guestName || "");
+  const [testiText2, setTestiText2] = useState(initialTestis[1]?.text || "");
+
   const [infoSuccess, setInfoSuccess] = useState(false);
+
+  // Sync state when current tenant changes
+  useEffect(() => {
+    setSalonName(currentTenant.name);
+    setSalonLocation(currentTenant.location);
+    setSalonPhone(currentTenant.phone);
+    setSalonEmail(currentTenant.ownerEmail || "");
+    setSalonOwner(currentTenant.ownerName || "");
+    setSalonDescription(currentTenant.description || "");
+    setSalonAwardsText((currentTenant.awards || []).join("\n"));
+
+    const testis = currentTenant.testimonials || [];
+    setTestiName1(testis[0]?.guestName || "");
+    setTestiText1(testis[0]?.text || "");
+    setTestiName2(testis[1]?.guestName || "");
+    setTestiText2(testis[1]?.text || "");
+  }, [currentTenant]);
 
   // Service form state
   const [showServiceForm, setShowServiceForm] = useState(false);
@@ -271,12 +297,39 @@ export default function SalonSettingsView({
   // Handle saving primary salon details
   const handleSaveSalonInfo = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Parse awards line by line, trim and filter out empties
+    const parsedAwards = salonAwardsText
+      .split("\n")
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+
+    // Build testimonials list
+    const updatedTestimonials = [];
+    if (testiName1.trim() || testiText1.trim()) {
+      updatedTestimonials.push({
+        guestName: testiName1.trim() || "Khách Hàng",
+        text: testiText1.trim() || "Dịch vụ rất chu đáo!",
+        rating: 5
+      });
+    }
+    if (testiName2.trim() || testiText2.trim()) {
+      updatedTestimonials.push({
+        guestName: testiName2.trim() || "Khách Hàng",
+        text: testiText2.trim() || "Không gian sạch sẽ và thoải mái!",
+        rating: 5
+      });
+    }
+
     onUpdateTenantDetails({
       name: salonName,
       location: salonLocation,
       phone: salonPhone,
       ownerEmail: salonEmail,
-      ownerName: salonOwner
+      ownerName: salonOwner,
+      description: salonDescription,
+      awards: parsedAwards,
+      testimonials: updatedTestimonials
     });
     setInfoSuccess(true);
     setTimeout(() => setInfoSuccess(false), 3000);
@@ -520,11 +573,79 @@ export default function SalonSettingsView({
                 </div>
               </div>
 
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                  Mô tả giới thiệu ngắn về tiệm (About Us)
+                </label>
+                <textarea
+                  value={salonDescription}
+                  onChange={(e) => setSalonDescription(e.target.value)}
+                  placeholder="Kể câu chuyện về hành trình của tiệm, triết lý phục vụ, cam kết chất lượng..."
+                  rows={3}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 px-3.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:border-[#874C67] focus:bg-white focus:outline-hidden transition resize-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">
+                  Giải thưởng & Chứng nhận (Mỗi dòng một giải)
+                </label>
+                <textarea
+                  value={salonAwardsText}
+                  onChange={(e) => setSalonAwardsText(e.target.value)}
+                  placeholder="🏆 Tiệm Nails Được Yêu Thích Nhất Hoàn Kiếm&#10;🏅 Chứng Nhận Đạt Chuẩn Sức Khỏe Hoa Kỳ"
+                  rows={2}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 px-3.5 text-xs font-semibold text-slate-800 placeholder:text-slate-400 focus:border-[#874C67] focus:bg-white focus:outline-hidden transition resize-none"
+                />
+              </div>
+
+              {/* Review 1 */}
+              <div className="space-y-1.5 border-t border-slate-100 pt-3">
+                <label className="block text-[10px] font-bold text-[#874C67] uppercase tracking-wider">
+                  Nhận xét nổi bật 1 (Ý kiến khách hàng)
+                </label>
+                <input
+                  type="text"
+                  value={testiName1}
+                  onChange={(e) => setTestiName1(e.target.value)}
+                  placeholder="Tên khách hàng 1 (ví dụ: Chị Linh KOL)"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 px-3.5 text-xs font-semibold text-slate-800 focus:border-[#874C67] focus:bg-white focus:outline-hidden transition"
+                />
+                <textarea
+                  value={testiText1}
+                  onChange={(e) => setTestiText1(e.target.value)}
+                  placeholder="Nội dung đánh giá khen ngợi..."
+                  rows={2}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2 px-3 text-xs font-semibold text-slate-800 focus:border-[#874C67] focus:bg-white focus:outline-hidden transition resize-none"
+                />
+              </div>
+
+              {/* Review 2 */}
+              <div className="space-y-1.5 border-t border-slate-100 pt-3 mb-2">
+                <label className="block text-[10px] font-bold text-[#874C67] uppercase tracking-wider">
+                  Nhận xét nổi bật 2 (Ý kiến khách hàng)
+                </label>
+                <input
+                  type="text"
+                  value={testiName2}
+                  onChange={(e) => setTestiName2(e.target.value)}
+                  placeholder="Tên khách hàng 2 (ví dụ: Chị Vy)"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2.5 px-3.5 text-xs font-semibold text-slate-800 focus:border-[#874C67] focus:bg-white focus:outline-hidden transition"
+                />
+                <textarea
+                  value={testiText2}
+                  onChange={(e) => setTestiText2(e.target.value)}
+                  placeholder="Nội dung đánh giá khen ngợi..."
+                  rows={2}
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 py-2 px-3 text-xs font-semibold text-slate-800 focus:border-[#874C67] focus:bg-white focus:outline-hidden transition resize-none"
+                />
+              </div>
+
               <button
                 type="submit"
                 className="w-full mt-2 rounded-xl bg-[#874C67] text-white hover:bg-[#6c3c52] transition text-xs font-extrabold py-3 shadow-md shadow-brand-100 flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <Check className="h-4 w-4" /> Lưu Thiết Lập Thư Mục
+                <Check className="h-4 w-4" /> Lưu Thiết Lập Thư Mục & Nhận Diện
               </button>
             </form>
           </div>

@@ -14,7 +14,8 @@ import {
   CreditCard,
   ShieldAlert,
   Crown,
-  Settings
+  Settings,
+  Sparkles
 } from "lucide-react";
 
 interface SidebarProps {
@@ -60,6 +61,7 @@ export default function Sidebar({
     } else {
       // Salon Admin Items
       return [
+        { id: "intro", label: "Giới thiệu", icon: Sparkles },
         { id: "dashboard", label: "Bảng tổng quan", icon: LayoutDashboard },
         { 
           id: "calendar", 

@@ -31,9 +31,10 @@ import ManagerLoginView from "./components/ManagerLoginView";
 import SaasHubView from "./components/SaasHubView";
 import BillingView from "./components/BillingView";
 import SalonSettingsView from "./components/SalonSettingsView";
+import IntroView from "./components/IntroView";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<string>("dashboard");
+  const [activeTab, setActiveTab] = useState<string>("intro");
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [quickBookOpen, setQuickBookOpen] = useState<boolean>(false);
 
@@ -80,7 +81,17 @@ export default function App() {
         trialStartDate: "2026-05-15", // ~36 days ago (In Trial)
         subscriptionStatus: "Trial",
         registrationDate: "2026-05-15",
-        isLocked: false
+        isLocked: false,
+        description: "Modern, hygiene-focused luxury salon leading Dallas in clean organic nails, premium gel creations, and stunning customized lashes. Every appointment comes with signature herbal teas.",
+        awards: ["🏆 Best Luxury Salon in Dallas 2025", "🎖️ D-Magazine Top Beauty Spa Winner"],
+        testimonials: [
+          { guestName: "Sophia Loren", text: "Their gel manicure artwork is exceptionally detailed. Best salon in Dallas!", rating: 5 },
+          { guestName: "Emma Stone", text: "Extremely hygienic, serene atmosphere, and incredibly skilled technicians! Love the organic matcha tea.", rating: 5 }
+        ],
+        identityImages: [
+          "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600",
+          "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=600"
+        ]
       },
       {
         id: "tenant-2",
@@ -92,7 +103,15 @@ export default function App() {
         trialStartDate: "2026-03-10", // ~102 days ago (Trial Expired!)
         subscriptionStatus: "Trial",
         registrationDate: "2026-03-10",
-        isLocked: false
+        isLocked: false,
+        description: "Vibrant high-contrast boutique salon in downtown Austin, specializing in precision builder-gel, multi-color gradient nail art, and trendsetting acrylic extensions.",
+        awards: ["🏆 Austin Chronicle Best Nail Art Studio", "💅 Texas Beauty Standard Gold Medal"],
+        testimonials: [
+          { guestName: "Jessica Miller", text: "The builder gel has saved my weak nails, and the hand-painted designs are works of art!", rating: 5 }
+        ],
+        identityImages: [
+          "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600"
+        ]
       },
       {
         id: "tenant-3",
@@ -105,7 +124,17 @@ export default function App() {
         trialStartDate: "2026-01-20",
         subscriptionStatus: "Active",
         billingPlan: "yearly",
-        isLocked: false
+        isLocked: false,
+        description: "Không gian làm đẹp cao cấp, yên tĩnh nằm cạnh Hồ Gươm. Chuyên sâu về móng gel nghệ thuật Hàn - Nhật, nối mi chất liệu lụa siêu mỏng nhẹ, và trị liệu chăm sóc tay chân sâu (Paraffin, thảo dược cổ truyền). Cam kết bảo hành dịch vụ 7 ngày.",
+        awards: ["🏆 Thương Hiệu Làm Đẹp Uy Tín Hà Nội 2025", "🎖️ Top 5 Salon Nails-Lash Được Yêu Thích Quận Hoàn Kiếm"],
+        testimonials: [
+          { guestName: "Khánh Linh (KOL)", text: "Bộ móng đính đá cầu kỳ được Amber làm tỉ mỉ suốt 2 tiếng mà không hề cộm, giữ bền tận 5 tuần vẫn bóng loáng!", rating: 5 },
+          { guestName: "Chị Thanh Hằng", text: "Trải nghiệm ngâm muối thảo mộc và massage chân thảo dược ở đây cực kỳ thư giãn. Mi mắt nối mỏng nhẹ, tự nhiên như mi thật, ngủ dậy chớp không đau mắt tí nào.", rating: 5 }
+        ],
+        identityImages: [
+          "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=600",
+          "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600"
+        ]
       }
     ];
   });
@@ -791,6 +820,18 @@ export default function App() {
             onSubscribeTenant={handleSubscribeTenant}
           />
         );
+      case "intro":
+        return (
+          <IntroView 
+            currentTenant={currentTenant}
+            services={services}
+            staff={staff}
+            onBookNow={() => {
+              setActiveTab("calendar");
+              setQuickBookOpen(true);
+            }}
+          />
+        );
       case "dashboard":
         return (
           <DashboardView 
@@ -947,6 +988,7 @@ export default function App() {
 
         <main className="flex-1 overflow-y-auto max-w-7xl w-full mx-auto px-6 py-6 sm:px-8 sm:py-8">
           <CustomerPortalView
+            currentTenant={currentTenant}
             services={services}
             staff={staff}
             customers={customers}

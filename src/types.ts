@@ -4,6 +4,7 @@ export interface Service {
   category: "Manicure" | "Pedicure" | "Gel" | "Acrylic" | "Nail Art" | "Waxing" | "Other";
   price: number;
   durationMinutes: number;
+  image?: string;
 }
 
 export interface Staff {
@@ -118,5 +119,8 @@ export interface Tenant {
   registrationDate: string; // YYYY-MM-DD
   isLocked?: boolean; // Blocked or suspended by SuperAdmin
   identityImages?: string[];
+  description?: string;
+  awards?: string[];
+  testimonials?: { guestName: string; text: string; rating: number }[];
 }
 
